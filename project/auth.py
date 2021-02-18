@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash
 
 from .models import User
@@ -24,6 +24,7 @@ def signup_post():
     # Email addresses can only be used for a single account
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
+        flash('Email address already exists')
         return redirect(url_for('auth.signup'))
 
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
